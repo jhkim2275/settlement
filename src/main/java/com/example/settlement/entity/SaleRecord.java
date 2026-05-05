@@ -3,7 +3,7 @@ package com.example.settlement.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -12,19 +12,14 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 public class SaleRecord {
 
     @Id
-    @GeneratedValue
-    private Long id;
+    private String id;
 
-    private Long creatorId;
-    private Long classId;
-    private Long userId;
+    private String creatorId;
+    private String courseId;
+    private String studentId;
 
     private int amount;
-
-    @Enumerated(EnumType.STRING)
-    private Type type;
-
-    private LocalDateTime createdAt;
-
-    private Long originalSaleId;
+    
+    private OffsetDateTime paidAt;
+    //private Long originalSaleId;
 }

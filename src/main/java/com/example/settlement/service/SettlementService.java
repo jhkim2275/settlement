@@ -1,12 +1,12 @@
 package com.example.settlement.service;
 
 import com.example.settlement.entity.SaleRecord;
-import com.example.settlement.entity.Type;
 import com.example.settlement.repository.SaleRecordRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,21 +17,24 @@ public class SettlementService {
 
     private final SaleRecordRepository repo;
 
-    public Map<String, Object> getMonthlySettlement(Long creatorId, int year, int month) {
+    public Map<String, Object> getMonthlySettlement(String creatorId, int year, int month) {
 
-        LocalDateTime start = LocalDateTime.of(year, month, 1, 0, 0);
-        LocalDateTime end = start.plusMonths(1).minusSeconds(1);
+        OffsetDateTime start = OffsetDateTime.of(year, month, 1, 0, 0, 0, 0, ZoneOffset.UTC);
+        OffsetDateTime end = start.plusMonths(1).minusSeconds(1);
 
         List<SaleRecord> records =
-                repo.findByCreatorIdAndCreatedAtBetween(creatorId, start, end);
+                repo.findByCreatorIdAndPaidAtBetween(creatorId, start, end);
 
         int totalSale = 0;
         int totalRefund = 0;
 
         for (SaleRecord r : records) {
-            if (r.getType() == Type.SALE) {
+
+            if (r.getId().startsWith("sale")) {
                 totalSale += r.getAmount();
-            } else if (r.getType() == Type.REFUND) {
+            }
+
+            else if (r.getId().startsWith("cancel")) {
                 totalRefund += r.getAmount();
             }
         }

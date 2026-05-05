@@ -15,7 +15,7 @@ public class SettlementController {
 
     @GetMapping("/monthly")
     public Map<String, Object> getMonthly(
-            @RequestParam Long creatorId,
+            @RequestParam String creatorId,
             @RequestParam int year,
             @RequestParam int month) {
 

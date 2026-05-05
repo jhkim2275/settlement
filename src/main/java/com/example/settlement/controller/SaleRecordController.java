@@ -2,21 +2,25 @@ package com.example.settlement.controller;
 
 import com.example.settlement.entity.SaleRecord;
 import com.example.settlement.repository.SaleRecordRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
+import java.util.List;
 
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/sales")
 public class SaleRecordController {
 
-    private final SaleRecordRepository repo;
+    private final SaleRecordRepository saleRecordRepository;
+    public SaleRecordController(SaleRecordRepository saleRecordRepository) {
+        this.saleRecordRepository = saleRecordRepository;
+    }
 
     @PostMapping
-    public SaleRecord create(@RequestBody SaleRecord record) {
-        record.setCreatedAt(LocalDateTime.now());
-        return repo.save(record);
+    public SaleRecord createSale(@RequestBody SaleRecord saleRecord) {
+        return saleRecordRepository.save(saleRecord);
+    }
+    @GetMapping
+    public List<SaleRecord> getAllSales() {
+        return saleRecordRepository.findAll();
     }
 }
