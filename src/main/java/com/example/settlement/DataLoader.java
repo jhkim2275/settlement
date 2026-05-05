@@ -6,6 +6,7 @@ import com.example.settlement.dto.CourseDTO;
 import com.example.settlement.entity.SaleRecord;
 import com.example.settlement.repository.SaleRecordRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,7 +20,7 @@ public class DataLoader {
         return args -> {
 
             ObjectMapper mapper = new ObjectMapper();
-
+            mapper.registerModule(new JavaTimeModule());
             InputStream input = getClass()
                     .getClassLoader()
                     .getResourceAsStream("data.json");
