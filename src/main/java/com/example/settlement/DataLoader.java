@@ -11,10 +11,12 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import java.io.InputStream;
+import java.util.HashMap;
 
 @Configuration
 public class DataLoader {
 
+    public static HashMap<String, String> courseToCreator = new HashMap<>();
     @Bean
     CommandLineRunner loadData(SaleRecordRepository saleRepo) {
         return args -> {
@@ -35,6 +37,9 @@ public class DataLoader {
             // courses
             for (CourseDTO c : data.getCourses()) {
                 System.out.println("Course: " + c.getTitle());
+
+                // places class, creator in the hashmap
+                courseToCreator.put(c.getId(), c.getCreatorId());
             }
 
             // sales

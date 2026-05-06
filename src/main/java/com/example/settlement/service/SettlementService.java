@@ -10,6 +10,7 @@ import java.time.ZoneOffset;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import static com.example.settlement.DataLoader.courseToCreator;
 
 @Service
 @RequiredArgsConstructor
@@ -19,28 +20,27 @@ public class SettlementService {
 
     public Map<String, Object> getMonthlySettlement(String creatorId, int year, int month) {
 
-        OffsetDateTime start = OffsetDateTime.of(year, month, 1, 0, 0, 0, 0, ZoneOffset.UTC);
+        OffsetDateTime start = OffsetDateTime.of(year, month, 1, 0, 0, 0, 0, ZoneOffset.of("+09:00"));
         OffsetDateTime end = start.plusMonths(1).minusSeconds(1);
 
         List<SaleRecord> records =
-                repo.findByCreatorIdAndPaidAtBetween(creatorId, start, end);
+                repo.findByPaidAtBetween(start, end);
 
         int totalSale = 0;
         int totalRefund = 0;
 
         for (SaleRecord r : records) {
-
-            if (r.getId().startsWith("sale")) {
+            String creator = courseToCreator.get(r.getCourseId());
+            if (!creatorId.equals(creator)) {continue;}
+            if (r.getAmount() > 0) {
                 totalSale += r.getAmount();
-            }
-
-            else if (r.getId().startsWith("cancel")) {
-                totalRefund += r.getAmount();
+            } else {
+                totalRefund += Math.abs(r.getAmount());
             }
         }
 
         int net = totalSale - totalRefund;
-        int fee = (int) (net * 0.2);
+        int fee = (int) (Math.max(net, 0) * 0.2);
         // fee set at 20% 
         int settlement = net - fee;
 

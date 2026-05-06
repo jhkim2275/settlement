@@ -8,8 +8,7 @@ import java.util.List;
 
 public interface SaleRecordRepository extends JpaRepository<SaleRecord, String> {
 
-    List<SaleRecord> findByCreatorIdAndPaidAtBetween(
-            String creatorId,
+    List<SaleRecord> findByPaidAtBetween(
             OffsetDateTime start,
             OffsetDateTime end
     );
