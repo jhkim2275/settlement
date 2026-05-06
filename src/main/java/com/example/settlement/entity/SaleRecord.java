@@ -14,12 +14,14 @@ public class SaleRecord {
     @Id
     private String id;
 
-    private String creatorId;
-    private String courseId;
     private String studentId;
-
     private int amount;
-    
     private OffsetDateTime paidAt;
-    //private Long originalSaleId;
+
+    @Transient
+    private String courseId;
+
+    @ManyToOne
+    @JoinColumn(name = "course_id")
+    private Course course;
 }

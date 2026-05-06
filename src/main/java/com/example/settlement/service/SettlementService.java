@@ -10,7 +10,6 @@ import java.time.ZoneOffset;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import static com.example.settlement.DataLoader.courseToCreator;
 
 @Service
 @RequiredArgsConstructor
@@ -30,7 +29,7 @@ public class SettlementService {
         int totalRefund = 0;
 
         for (SaleRecord r : records) {
-            String creator = courseToCreator.get(r.getCourseId());
+            String creator = r.getCourse().getCreator().getId();
             if (!creatorId.equals(creator)) {continue;}
             if (r.getAmount() > 0) {
                 totalSale += r.getAmount();
