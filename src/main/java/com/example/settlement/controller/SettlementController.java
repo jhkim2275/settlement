@@ -8,14 +8,14 @@ import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/settlements")
+@RequestMapping("/creators/{creatorId}/settlements")
 public class SettlementController {
 
     private final SettlementService service;
 
-    @GetMapping("/monthly")
+    @GetMapping
     public Map<String, Object> getMonthly(
-            @RequestParam String creatorId,
+            @PathVariable String creatorId,
             @RequestParam int year,
             @RequestParam int month) {
 
