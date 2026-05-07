@@ -6,12 +6,11 @@ import com.example.settlement.repository.SaleRecordRepository;
 import com.example.settlement.dto.SettlementResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -19,6 +18,7 @@ public class SettlementService {
 
     private final SaleRecordRepository repo;
 
+    @Transactional
     public SettlementResponse getMonthlySettlement(String creatorId, int year, int month) {
 
         OffsetDateTime start = OffsetDateTime.of(year, month, 1, 0, 0, 0, 0, ZoneOffset.of("+09:00"));
