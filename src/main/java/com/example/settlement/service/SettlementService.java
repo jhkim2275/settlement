@@ -2,6 +2,7 @@ package com.example.settlement.service;
 
 import com.example.settlement.entity.Refund;
 import com.example.settlement.entity.SaleRecord;
+import com.example.settlement.repository.CreatorRepository;
 import com.example.settlement.repository.SaleRecordRepository;
 import com.example.settlement.dto.SettlementResponse;
 import lombok.RequiredArgsConstructor;
@@ -18,8 +19,18 @@ public class SettlementService {
 
     private final SaleRecordRepository repo;
 
+    private final CreatorRepository creatorRepo;
+
     @Transactional
     public SettlementResponse getMonthlySettlement(String creatorId, int year, int month) {
+
+        if (month<1||month>12){
+            throw new IllegalArgumentException("Invalid Month");
+        }
+
+        if (!creatorRepo.existsById(creatorId)) {
+            throw new IllegalArgumentException("Creator not found");
+        }
 
         OffsetDateTime start = OffsetDateTime.of(year, month, 1, 0, 0, 0, 0, ZoneOffset.of("+09:00"));
         OffsetDateTime end = start.plusMonths(1).minusSeconds(1);
@@ -34,8 +45,10 @@ public class SettlementService {
             String creator = r.getCourse().getCreator().getId();
             if (!creatorId.equals(creator)) {continue;}
             totalSale += r.getAmount();
-            for (Refund refund : r.getRefunds()) {
-                totalRefund += refund.getAmount();
+            if (r.getRefunds()!=null){
+                for (Refund refund : r.getRefunds()) {
+                    totalRefund += refund.getAmount();
+                }
             }
         }
 
