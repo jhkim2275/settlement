@@ -6,9 +6,11 @@ import com.example.settlement.dto.CourseDTO;
 import com.example.settlement.entity.Course;
 import com.example.settlement.entity.Creator;
 import com.example.settlement.entity.SaleRecord;
+import com.example.settlement.entity.Refund;
 import com.example.settlement.repository.CreatorRepository;
 import com.example.settlement.repository.SaleRecordRepository;
 import com.example.settlement.repository.CourseRepository;
+import com.example.settlement.repository.RefundRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.boot.CommandLineRunner;
@@ -20,12 +22,12 @@ import java.util.HashMap;
 @Configuration
 public class DataLoader {
 
-    public static HashMap<String, String> courseToCreator = new HashMap<>();
     @Bean
     CommandLineRunner loadData(
         SaleRecordRepository saleRepo,
         CreatorRepository creatorRepo,
-        CourseRepository courseRepo
+        CourseRepository courseRepo,
+        RefundRepository refundRepo
     ) {
         return args -> {
 
@@ -62,10 +64,22 @@ public class DataLoader {
                 courseMap.put(c.getId(), course);
             }
             // sales
+            HashMap<String, SaleRecord> saleMap = new HashMap<>();
+
             for (SaleRecord s : data.getSaleRecords()) {
-                s.setCourse(courseMap.get(s.getCourseId())); // ⭐ 핵심
+
+                s.setCourse(courseMap.get(s.getCourseId()));
 
                 saleRepo.save(s);
+
+                saleMap.put(s.getId(), s);
+            }
+            // refunds
+            for (Refund r : data.getRefunds()) {
+
+                r.setSaleRecord(saleMap.get(r.getSaleId()));
+
+                refundRepo.save(r);
             }
         };
     }

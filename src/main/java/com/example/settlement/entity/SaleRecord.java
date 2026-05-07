@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 import java.time.OffsetDateTime;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import java.util.ArrayList;
+import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Entity
@@ -24,4 +26,7 @@ public class SaleRecord {
     @ManyToOne
     @JoinColumn(name = "course_id")
     private Course course;
+
+    @OneToMany(mappedBy = "saleRecord", cascade = CascadeType.ALL)
+    private List<Refund> refunds = new ArrayList<>();
 }

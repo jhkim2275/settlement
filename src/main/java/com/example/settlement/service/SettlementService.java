@@ -1,5 +1,6 @@
 package com.example.settlement.service;
 
+import com.example.settlement.entity.Refund;
 import com.example.settlement.entity.SaleRecord;
 import com.example.settlement.repository.SaleRecordRepository;
 import lombok.RequiredArgsConstructor;
@@ -31,10 +32,9 @@ public class SettlementService {
         for (SaleRecord r : records) {
             String creator = r.getCourse().getCreator().getId();
             if (!creatorId.equals(creator)) {continue;}
-            if (r.getAmount() > 0) {
-                totalSale += r.getAmount();
-            } else {
-                totalRefund += Math.abs(r.getAmount());
+            totalSale += r.getAmount();
+            for (Refund refund : r.getRefunds()) {
+                totalRefund += refund.getAmount();
             }
         }
 
