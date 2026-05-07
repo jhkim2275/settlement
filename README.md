@@ -1,63 +1,105 @@
-Creator Settlement API
-Project Overview
+# Creator Settlement API
+
+## Project Overview
 
 This project is a backend API for creator settlement management.
 
 It calculates monthly settlements for creators based on:
 
-Course sales
-Refunds
-Platform fee
+* Course sales
+* Refunds
+* Platform fee deduction
 
 The system is built using Spring Boot, JPA, and H2 Database.
 
-Tech Stack
-Java 17
-Spring Boot
-Spring Data JPA
-Hibernate
-H2 Database (In-Memory)
-JUnit 5
-Features
-Load JSON mock data into H2 database
-Manage Creator / Course / Sale / Refund relationships
-Calculate creator monthly settlements
-Refund support
-REST API endpoint
-Service layer testing
-Project Structure
+---
+
+## Tech Stack
+
+* Java 17
+* Spring Boot
+* Spring Data JPA
+* Hibernate
+* H2 Database (In-Memory)
+* JUnit 5
+
+---
+
+## Features
+
+* Load JSON mock data into H2 database
+* Manage Creator / Course / Sale / Refund relationships
+* Calculate creator monthly settlements
+* Refund support
+* REST API endpoint
+* Service layer testing
+
+---
+
+## Project Structure
+
+```text
 controller/
 service/
 repository/
 entity/
 dto/
 config/
-Entity Relationships
+```
+
+---
+
+## Entity Relationships
+
+```text
 Creator 1:N Course
 Course 1:N SaleRecord
 SaleRecord 1:N Refund
-Settlement Calculation
+```
 
-Net Revenue:
+---
 
-\text{net}=\text{totalSale}-\text{totalRefund}
+## Settlement Calculation
 
-Fixed Platform Fee (20%):
+### Net Revenue
 
-\text{fee}=\text{net}\times0.2
+```text
+net = totalSale - totalRefund
+```
 
-Final Settlement:
+### Platform Fee (20%)
 
-\text{settlement}=\text{net}-\text{fee}
+```text
+fee = net * 0.2
+```
 
-API
-Get Monthly Settlement
+### Final Settlement
+
+```text
+settlement = net - fee
+```
+
+---
+
+## API
+
+### Get Monthly Settlement
+
+```http
 GET /creators/{creatorId}/settlements?year=2025&month=3
+```
 
 Example:
 
+```http
 GET /creators/creator-1/settlements?year=2025&month=3
-Example Response
+```
+
+---
+
+## Example Response
+
+```json
 {
   "totalSale": 260000,
   "totalRefund": 80000,
@@ -65,36 +107,74 @@ Example Response
   "fee": 36000,
   "settlement": 144000
 }
-How to Run
-Run Application
+```
+
+---
+
+## How to Run
+
+### Run Application
+
+```bash
 ./gradlew bootRun
+```
 
 Server:
 
+```text
 http://localhost:8080
-H2 Console
+```
+
+---
+
+## H2 Console
+
+```text
 http://localhost:8080/h2-console
-Run Tests
+```
+
+---
+
+## Run Tests
+
+```bash
 ./gradlew test
-Assumptions
-Fee rate is fixed at 20%
-Refunds reduce creator revenue
-Settlement is calculated monthly
-Data is loaded from data.json
-Test Coverage
-Monthly settlement calculation
-Refund deduction
-Fee calculation
-Creator-specific settlement filtering
-Design Decisions
-JPA entity relationships are used instead of manual mapping
-DTO is used for API responses
-Business logic is separated into Service layer
-H2 in-memory database is used for simplicity
-Future Improvements
-Authentication / Authorization
-Pagination
-Production database support
-Advanced refund policies
-Settlement history management
-Validation & exception handling
+```
+
+---
+
+## Assumptions
+
+* Fee rate is fixed at 20%
+* Refunds reduce creator revenue
+* Settlement is calculated monthly
+* Data is loaded from `data.json`
+
+---
+
+## Test Coverage
+
+* Monthly settlement calculation
+* Refund deduction
+* Fee calculation
+* Creator-specific settlement filtering
+
+---
+
+## Design Decisions
+
+* JPA entity relationships are used instead of manual mapping
+* DTO is used for API responses
+* Business logic is separated into Service layer
+* H2 in-memory database is used for simplicity
+
+---
+
+## Future Improvements
+
+* Authentication / Authorization
+* Pagination
+* Production database support
+* Advanced refund policies
+* Settlement history management
+* Validation & exception handling
