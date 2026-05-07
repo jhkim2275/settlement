@@ -3,6 +3,7 @@ package com.example.settlement.service;
 import com.example.settlement.entity.Refund;
 import com.example.settlement.entity.SaleRecord;
 import com.example.settlement.repository.SaleRecordRepository;
+import com.example.settlement.dto.SettlementResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +19,7 @@ public class SettlementService {
 
     private final SaleRecordRepository repo;
 
-    public Map<String, Object> getMonthlySettlement(String creatorId, int year, int month) {
+    public SettlementResponse getMonthlySettlement(String creatorId, int year, int month) {
 
         OffsetDateTime start = OffsetDateTime.of(year, month, 1, 0, 0, 0, 0, ZoneOffset.of("+09:00"));
         OffsetDateTime end = start.plusMonths(1).minusSeconds(1);
@@ -43,13 +44,6 @@ public class SettlementService {
         // fee set at 20% 
         int settlement = net - fee;
 
-        Map<String, Object> result = new HashMap<>();
-        result.put("totalSale", totalSale);
-        result.put("totalRefund", totalRefund);
-        result.put("net", net);
-        result.put("fee", fee);
-        result.put("settlement", settlement);
-
-        return result;
+        return new SettlementResponse(totalSale, totalRefund, net, fee, settlement);
     }
 }

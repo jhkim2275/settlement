@@ -3,6 +3,7 @@ package com.example.settlement.controller;
 import com.example.settlement.service.SettlementService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import com.example.settlement.dto.SettlementResponse;
 
 import java.util.Map;
 
@@ -14,7 +15,7 @@ public class SettlementController {
     private final SettlementService service;
 
     @GetMapping
-    public Map<String, Object> getMonthly(
+    public SettlementResponse getMonthly(
             @PathVariable String creatorId,
             @RequestParam int year,
             @RequestParam int month) {
