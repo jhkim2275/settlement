@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 @SpringBootTest
 public class SettlementServiceTest {
 
@@ -23,5 +24,30 @@ public class SettlementServiceTest {
         assertEquals(180000, result.getNet());
         assertEquals(36000, result.getFee());
         assertEquals(144000, result.getSettlement());
+    }
+    @Test
+    void invalidMonthTest() {
+
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> service.getMonthlySettlement(
+                        "creator-1",
+                        2025,
+                        13
+                )
+        );
+    }
+    
+    @Test
+    void creatorNotFoundTest() {
+
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> service.getMonthlySettlement(
+                        "invalid-creator",
+                        2025,
+                        3
+                )
+        );
     }
 }
