@@ -205,3 +205,19 @@ These scenarios were added to ensure settlement accuracy and edge-case handling.
 * Advanced refund policies
 * Settlement history management
 * Validation & exception handling
+
+---
+
+## AI Usage
+
+AI tools were actively used during the development of this project as a coding assistant.
+
+AI was used for:
+- Assisting in implementation of Spring Boot / JPA data modeling patterns
+- Helping design and refine settlement calculation logic (including refund edge cases)
+- Debugging runtime issues such as LazyInitializationException and test failures
+- Suggesting improvements for test case coverage and edge-case handling
+
+While the overall system structure and requirements interpretation were guided by me, AI played a significant role in accelerating implementation and resolving technical issues during development.
+
+Key design decisions (such as entity relationships, API structure, and final business rules) were reviewed and adjusted by me based on project requirements.
