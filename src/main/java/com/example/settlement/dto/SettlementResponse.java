@@ -12,4 +12,7 @@ public class SettlementResponse {
     private int net;
     private int fee;
     private int settlement;
+
+    private int saleCount;
+    private int refundCount;
 }

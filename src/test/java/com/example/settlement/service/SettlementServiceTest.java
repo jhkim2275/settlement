@@ -54,6 +54,8 @@ public class SettlementServiceTest {
         assertEquals(150000, result.getNet());
         assertEquals(30000, result.getFee());
         assertEquals(120000, result.getSettlement());
+        assertEquals(4, result.getSaleCount());
+        assertEquals(2, result.getRefundCount());
     }
 
     @Test
@@ -71,6 +73,8 @@ public class SettlementServiceTest {
         assertEquals(-60000, result.getNet());
         assertEquals(0, result.getFee());
         assertEquals(-60000, result.getSettlement());
+        assertEquals(0, result.getSaleCount());
+        assertEquals(1, result.getRefundCount());
     }
 
     @Test
@@ -88,5 +92,7 @@ public class SettlementServiceTest {
         assertEquals(0, result.getNet());
         assertEquals(0, result.getFee());
         assertEquals(0, result.getSettlement());
+        assertEquals(0, result.getSaleCount());
+        assertEquals(0, result.getRefundCount());
     }
 }

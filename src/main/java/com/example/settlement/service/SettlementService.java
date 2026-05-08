@@ -47,16 +47,21 @@ public class SettlementService {
         int totalSale = 0;
         int totalRefund = 0;
 
+        int saleCount = 0;
+        int refundCount = 0;
+
         for (SaleRecord r : records) {
             String creator = r.getCourse().getCreator().getId();
             if (!creatorId.equals(creator)) {continue;}
             totalSale += r.getAmount();
+            saleCount++;
         }
 
         for (Refund refund: refunds){
             String creator = refund.getSaleRecord().getCourse().getCreator().getId();
             if (!creatorId.equals(creator)) {continue;}
             totalRefund += refund.getAmount();
+            refundCount++;
         }
 
         int net = totalSale - totalRefund;
@@ -64,6 +69,6 @@ public class SettlementService {
         // fee set at 20% 
         int settlement = net - fee;
 
-        return new SettlementResponse(totalSale, totalRefund, net, fee, settlement);
+        return new SettlementResponse(totalSale, totalRefund, net, fee, settlement, saleCount, refundCount);
     }
 }
