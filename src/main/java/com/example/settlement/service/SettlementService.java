@@ -4,6 +4,7 @@ import com.example.settlement.entity.Refund;
 import com.example.settlement.entity.SaleRecord;
 import com.example.settlement.repository.CreatorRepository;
 import com.example.settlement.repository.SaleRecordRepository;
+import com.example.settlement.repository.RefundRepository;
 import com.example.settlement.dto.SettlementResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,8 @@ public class SettlementService {
     private final SaleRecordRepository repo;
 
     private final CreatorRepository creatorRepo;
+
+    private final RefundRepository refundRepo;
 
     @Transactional
     public SettlementResponse getMonthlySettlement(String creatorId, int year, int month) {
@@ -38,6 +41,9 @@ public class SettlementService {
         List<SaleRecord> records =
                 repo.findByPaidAtBetween(start, end);
 
+        List<Refund> refunds = 
+                refundRepo.findByRefundedAtBetween(start, end);
+
         int totalSale = 0;
         int totalRefund = 0;
 
@@ -45,11 +51,12 @@ public class SettlementService {
             String creator = r.getCourse().getCreator().getId();
             if (!creatorId.equals(creator)) {continue;}
             totalSale += r.getAmount();
-            if (r.getRefunds()!=null){
-                for (Refund refund : r.getRefunds()) {
-                    totalRefund += refund.getAmount();
-                }
-            }
+        }
+
+        for (Refund refund: refunds){
+            String creator = refund.getSaleRecord().getCourse().getCreator().getId();
+            if (!creatorId.equals(creator)) {continue;}
+            totalRefund += refund.getAmount();
         }
 
         int net = totalSale - totalRefund;

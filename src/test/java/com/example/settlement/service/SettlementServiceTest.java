@@ -14,18 +14,6 @@ public class SettlementServiceTest {
     private SettlementService service;
 
     @Test
-    void creator1MarchSettlementTest() {
-
-        SettlementResponse result =
-                service.getMonthlySettlement("creator-1", 2025, 3);
-
-        assertEquals(260000, result.getTotalSale());
-        assertEquals(80000, result.getTotalRefund());
-        assertEquals(180000, result.getNet());
-        assertEquals(36000, result.getFee());
-        assertEquals(144000, result.getSettlement());
-    }
-    @Test
     void invalidMonthTest() {
 
         assertThrows(
@@ -37,7 +25,7 @@ public class SettlementServiceTest {
                 )
         );
     }
-    
+
     @Test
     void creatorNotFoundTest() {
 
@@ -49,5 +37,56 @@ public class SettlementServiceTest {
                         3
                 )
         );
+    }
+
+    @Test
+    void creator1MarchSettlementWithPartialRefundTest() {
+
+        SettlementResponse result =
+                service.getMonthlySettlement(
+                        "creator-1",
+                        2025,
+                        3
+                );
+
+        assertEquals(260000, result.getTotalSale());
+        assertEquals(110000, result.getTotalRefund());
+        assertEquals(150000, result.getNet());
+        assertEquals(30000, result.getFee());
+        assertEquals(120000, result.getSettlement());
+    }
+
+    @Test
+    void creator2FebruaryRefundTest() {
+
+        SettlementResponse result =
+                service.getMonthlySettlement(
+                        "creator-2",
+                        2025,
+                        2
+                );
+
+        assertEquals(0, result.getTotalSale());
+        assertEquals(60000, result.getTotalRefund());
+        assertEquals(-60000, result.getNet());
+        assertEquals(0, result.getFee());
+        assertEquals(-60000, result.getSettlement());
+    }
+
+    @Test
+    void creator3MarchEmptySettlementTest() {
+
+        SettlementResponse result =
+                service.getMonthlySettlement(
+                        "creator-3",
+                        2025,
+                        3
+                );
+
+        assertEquals(0, result.getTotalSale());
+        assertEquals(0, result.getTotalRefund());
+        assertEquals(0, result.getNet());
+        assertEquals(0, result.getFee());
+        assertEquals(0, result.getSettlement());
     }
 }
