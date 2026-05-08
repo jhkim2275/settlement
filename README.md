@@ -29,8 +29,10 @@ The system is built using Spring Boot, JPA, and H2 Database.
 
 * Load JSON mock data into H2 database
 * Manage Creator / Course / Sale / Refund relationships
-* Calculate creator monthly settlements
-* Refund support
+* Monthly sale/refund count calculation
+* Validation for invalid creator and invalid month
+* Partial refund support
+* Cross-month refund settlement handling
 * REST API endpoint
 * Service layer testing
 
@@ -102,10 +104,12 @@ GET /creators/creator-1/settlements?year=2025&month=3
 ```json
 {
   "totalSale": 260000,
-  "totalRefund": 80000,
-  "net": 180000,
-  "fee": 36000,
-  "settlement": 144000
+  "totalRefund": 110000,
+  "net": 150000,
+  "fee": 30000,
+  "settlement": 120000,
+  "saleCount": 4,
+  "refundCount": 2
 }
 ```
 
@@ -157,7 +161,30 @@ http://localhost:8080/h2-console
 * Monthly settlement calculation
 * Refund deduction
 * Fee calculation
-* Creator-specific settlement filtering
+* Partial refund calculation
+* Cross-month refund handling
+* Empty settlement month handling
+* Invalid creator validation
+* Invalid month validation
+* Sale/refund count calculation
+
+---
+
+## Additional Test Scenarios
+
+Additional test cases were added beyond the provided sample data:
+
+- Partial refund case
+  - Refund amount smaller than original payment
+- Cross-month refund case
+  - Sale in January and refund in February
+- Empty settlement month
+  - Creator with no sales/refunds in requested month
+- Invalid creator request
+- Invalid month request
+- Sale/refund count verification
+
+These scenarios were added to ensure settlement accuracy and edge-case handling.
 
 ---
 
